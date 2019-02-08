@@ -1,0 +1,37 @@
+*
+{ /* setting the default width of all the element to include padding and border */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+    font-size: 24px;
+    padding:20px;
+  }
+
+button {
+    background-color: white;
+    color:#6699ff;
+    width:300px;
+    height:50px;
+    padding:20px;
+    text-align:left;
+    margin:4px;
+    border:2px solid #555555;
+    border-radius: 4px;
+  }
+
+button:hover,
+button:focus {
+/* lets the mouse appear as a hand when hovering over the button */
+    cursor: pointer;  /* reduces the opacity of the button to 80% */
+    opacity: 0.8;
+  }
+
+@media all and (max-width: 500px) {
+    button {
+      width: 100px;
+      height: 20px;
+    }
+  }
