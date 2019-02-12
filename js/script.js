@@ -1,10 +1,12 @@
 var pokemonRepository=(function () {
   var repository=[];
+  var apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
 
   /* showing details properties of pokemon object*/
-  function showDetails(new_element)
+  function showDetails(item)
   {
-    console.log( new_element.name ,  new_element.height , new_element.type );
+    pokemonRepository.loadDetails(item).then(function () {
+    console.log(item);   });
   }
 
   /* This function  creats new element and adds into the DOM */
@@ -28,6 +30,7 @@ var pokemonRepository=(function () {
     });
   }
 
+
   /*Function verify candidate Pokemon and Adds verified Pokemons to the repository*/
   function add(new_pokemon)
   {
@@ -36,7 +39,7 @@ var pokemonRepository=(function () {
     {
       Object.keys(new_pokemon).forEach(function(property) {
       fill_object = 0;
-      if( (property == 'name') || (property == 'height') || (property == 'type') )
+      if( (property == 'name') || (property == 'detailsUrl') )
       {
         fill_object = 1;
       }
@@ -48,6 +51,40 @@ var pokemonRepository=(function () {
     }
   }
 
+/*Getting List of Pokemons from the specified URL */
+function loadList()
+{
+  return fetch(apiUrl).then(function (response) {
+    return response.json();
+  }).then(function (json) {
+    json.results.forEach(function (item) {
+    var pokemon = {
+    name: item.name,
+    detailsUrl: item.url
+    };
+    add(pokemon);
+    });
+  }).catch(function (e) {
+    console.error(e);
+  })
+}
+
+/*Fetching the details of each element from the specific URL*/
+function loadDetails(item)
+{
+  var url = item.detailsUrl;
+  return fetch(url).then(function (response) {
+    return response.json();
+  }).then(function (details) {
+    // Now we add the details to the item
+    item.imageUrl = details.sprites.front_default;
+    item.height = details.height;
+    item.types = Object.keys(details.types);
+  }).catch(function (e) {
+    console.error(e);
+  });
+}
+
   /*Function retrievs the complete repository*/
   function getAll()
   {
@@ -58,42 +95,16 @@ var pokemonRepository=(function () {
     add:add,
     addListItem:addListItem,
     getAll:getAll,
-    showDetails:showDetails
+    showDetails:showDetails,
+    loadList:loadList,
+    loadDetails:loadDetails
   };
 })();
 
-/*Declaring candidate Pokemons*/
-var pokemon1 ={
-  name:"Bulbasaur",
-  height:7,
-  type:"grass"
-};
-var pokemon2 ={
-  name:"Ivysaur",
-  height:6,
-  type:"poison"
-};
-var pokemon3 ={
-  name:"Venusaur",
-  height:8,
-  type:"grass"
-};
-
-var pokemon4 ={
-  name:"Chikusaur",
-  height:4,
-  type:"grass",
-  age: 10
-};
-
-/*Adding candidate Pokemon to the repository*/
-pokemonRepository.add(pokemon1);
-pokemonRepository.add(pokemon2);
-pokemonRepository.add(pokemon3);
-pokemonRepository.add(pokemon4);/*not a valid pokemon hence must not be added in the repository*/
-
+/*Promise operation for loadList*/
+pokemonRepository.loadList().then(function() {
 /*DOM Operation: Call addlistItem which manipulates the DOM and insert candidate pokemons */
-pokemonRepository.getAll().forEach(function(new_element)
+pokemonRepository.getAll().forEach(function(new_pokemon)
 {
-  pokemonRepository.addListItem(new_element);
-});
+  pokemonRepository.addListItem(new_pokemon);
+}); });
