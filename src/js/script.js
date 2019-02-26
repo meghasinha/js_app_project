@@ -5,8 +5,7 @@ var pokemonRepository=(function () {
   var $modalContainer1=document.querySelector('#modal-container1');
 
   /* showing details properties of pokemon object*/
-  function showDetails(item)
-  {
+  function showDetails(item) {
     pokemonRepository.showPleaseWait();
     pokemonRepository.loadDetails(item).then(function () {
     pokemonRepository.hidePleaseWait();
@@ -15,7 +14,8 @@ var pokemonRepository=(function () {
   }
 
   /*Created a new modal to display wait message */
-  function showPleaseWait() {
+  function showPleaseWait()
+  {
   /*var $newElement = document.createElement('div');
   $newElement.innerText = 'Please wait..';
   $newElement.setAttribute('id', 'new-id');
@@ -27,7 +27,7 @@ var pokemonRepository=(function () {
     var modal1=document.createElement('div');
     modal1.classList.add('modal1');
     var text=document.createElement('p');
-    text.innerHTML="please wait its loading";
+    text.innerHTML='please wait its loading';
     modal1.appendChild(text);
     $modalContainer1.appendChild(modal1);
     $modalContainer1.classList.add('is-visible');
@@ -55,14 +55,13 @@ var pokemonRepository=(function () {
     /* Now, steps for putting the new element in the DOM */
     var $ul = document.querySelector('.pokedox');
     $ul.appendChild($element);
-    var $button1 = document.querySelector('button');
     /*adding pointer event to display properties of pokemon*/
     $element.addEventListener('pointerdown', function(event)
     {
       /*Currently showing details for touch and mouse click */
       switch(event.pointerType) {
-        case "touch":
-        case "mouse":
+        case 'touch':
+        case 'mouse':
           showDetails(new_element);
       }
    });
@@ -97,6 +96,7 @@ var pokemonRepository=(function () {
     }).then(function (json) {
       json.results.forEach(function (item) {
       var pokemon = {
+
       name: item.name,
       detailsUrl: item.url
       };
@@ -146,7 +146,7 @@ var pokemonRepository=(function () {
     titleType.innerText='Type:'+ item.types;
     var imgElement=document.createElement('img');
     imgElement.classList.add('responsive');
-    imgElement.setAttribute("src",item.imageUrl);
+    imgElement.setAttribute('src',item.imageUrl);
     modal.appendChild(closeButtonElement);
     modal.appendChild(titleName);
     modal.appendChild(titleHeight);
